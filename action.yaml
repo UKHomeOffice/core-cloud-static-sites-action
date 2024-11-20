@@ -1,0 +1,27 @@
+name: 'Sync'
+description: ' '
+inputs:
+  role_name:
+    required: true
+  account_id:
+    required: true
+  bucket_name:
+    required: true
+  working_directory:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: aws-actions/configure-aws-credentials@v4
+      name: Configure AWS IdP Credentials
+      with:
+        role-to-assume: arn:aws:iam::${{ inputs.account_id }}:role/${{ inputs.role_name }}
+        role-session-name: GitHubActions
+        retry-max-attempts: 5
+        aws-region: eu-west-2
+
+    - name: Sync
+      shell: bash
+      run: |
+        cd ./${{ inputs.working_directory }}
+        aws s3 sync . s3://${{ inputs.bucket_name }}/ --delete
