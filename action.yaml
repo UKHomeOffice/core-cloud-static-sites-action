@@ -1,20 +1,20 @@
 name: 'Deploy Static Sites'
 description: 'Deploys Static Sites using S3 and CloudFront.'
 inputs:
-  assume_role_arn:
+  assume-role-arn:
     description: 'Role assumed by the action.'
     required: true
-  bucket_name:
+  bucket-name:
     description: 'The name of the S3 Bucket.'
     required: true
-  working_directory:
+  working-directory:
     description: 'Folder the files will be synced from.'
     required: true
-  cache_control_s_max_age:
+  cache-control-s-max-age:
     description: 'Number of seconds the information will be chached by CloudFront.'
     default: 86400
     required: false
-  cloudfront_distribution:
+  cloudfront-distribution:
     description: 'ID Name of CloudFront Distribution.'
     required: true
   
@@ -24,7 +24,7 @@ runs:
     - uses: aws-actions/configure-aws-credentials@v4
       name: Configure AWS IdP Credentials
       with:
-        role-to-assume: ${{ inputs.assume_role_arn }}
+        role-to-assume: ${{ inputs.assume-role-arn }}
         role-session-name: GitHubActions
         retry-max-attempts: 5
         aws-region: eu-west-2
@@ -32,7 +32,7 @@ runs:
     - name: Sync
       shell: bash
       run: |
-        cd ./${{ inputs.working_directory }}
-        aws s3 sync . s3://${{ inputs.bucket_name }}/ --delete --cache-control 's-maxage=${{ inputs.cache_control_s_max_age}}'
-        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront_distribution }} --paths "/*"
+        cd ./${{ inputs.working-directory }}
+        aws s3 sync . s3://${{ inputs.bucket-name }}/ --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
+        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
 
