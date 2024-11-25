@@ -1,7 +1,7 @@
-name: 'Static sites Sync'
-description: 'Syncronising static site files and Cloud Front cache management. '
+name: 'Deploy Static Sites'
+description: 'Deploys Static Sites using S3 and Cloud Front.'
 inputs:
-  role_arn:
+  assume_role_arn:
     description: 'Role assumed by the action.'
     required: true
   bucket_name:
@@ -24,7 +24,7 @@ runs:
     - uses: aws-actions/configure-aws-credentials@v4
       name: Configure AWS IdP Credentials
       with:
-        role-to-assume: ${{ inputs.role_arn }}
+        role-to-assume: ${{ inputs.assume_role_arn }}
         role-session-name: GitHubActions
         retry-max-attempts: 5
         aws-region: eu-west-2
