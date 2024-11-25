@@ -1,5 +1,5 @@
 name: 'Deploy Static Sites'
-description: 'Deploys Static Sites using S3 and Cloud Front.'
+description: 'Deploys Static Sites using S3 and CloudFront.'
 inputs:
   assume_role_arn:
     description: 'Role assumed by the action.'
