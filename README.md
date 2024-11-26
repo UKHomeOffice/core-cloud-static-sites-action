@@ -5,7 +5,7 @@ It's scope is to create an automatic action which enables tenants to deploy thei
 ## Overview
 The action :
 
-- is asuming the AWS Role
+- is assuming the AWS Role
 - is uploading the files to an S3 bucket
 - is setting the caching minimum time
 - is clearing the CloudFront cache so new file versions can be retrieved
