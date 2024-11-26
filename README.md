@@ -11,7 +11,7 @@ The action :
 - is clearing the CloudFront cache so new file versions can be retrieved
 
 
-## Usage
+## Using This Action
 The action it's capturing the esential information as input variables.
 
 The tenant must provide the below:
