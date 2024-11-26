@@ -33,6 +33,6 @@ runs:
       shell: bash
       run: |
         cd ./${{ inputs.working-directory }}
-        aws s3 sync . s3://${{ inputs.bucket-name }}/ --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
+        aws s3 sync . s3://${{ inputs.bucket-name }}/ --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
         aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
 
