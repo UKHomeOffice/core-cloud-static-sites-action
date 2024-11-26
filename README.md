@@ -20,7 +20,7 @@ The tenant must provide the below:
 |:--------------------------|:--------------------------------------------------------------------------------------------------|:---------|
 | assume-role-arn           | Role assumed by the action                                                                        |    Yes   |
 | bucket-name               | The name of the S3 Bucket.                                                                        |    Yes   |
-| working-directory         | Folder the files will be synced from.                                                             |    Yes   |
+| working-directory         | Relative path to the folder files will be uploaded from.                                          |    Yes   |
 | cache-control-s-max-age   | The time period contect is chached by CloudFront for. Default is 86400 seconds (24h).             |    No    |
 | cloudfront-distribution   | ID Name of CloudFront Distribution.                                                               |    Yes   |
 
