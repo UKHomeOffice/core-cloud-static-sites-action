@@ -22,6 +22,6 @@ The tenant must provide the below:
 | bucket-name               | The name of the S3 Bucket.                                                                        |    Yes   |
 | working-directory         | Folder the files will be synced from.                                                             |    Yes   |
 | cache-control-s-max-age   | The time period contect is chached by CloudFront for. Default is 86400 seconds (24h).             |    No    |
-| cloudfront-distribution   | ID Name of CloudFront Distribution.                                                               |    No    |
+| cloudfront-distribution   | ID Name of CloudFront Distribution.                                                               |    Yes   |
 
 
