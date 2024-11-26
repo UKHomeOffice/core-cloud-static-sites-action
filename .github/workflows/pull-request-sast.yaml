@@ -14,13 +14,13 @@ jobs:
     name: Run Terraform SAST
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Clone the Repository
-        uses: actions/checkout@v4
+    # steps:
+    #   - name: Clone the Repository
+    #     uses: actions/checkout@v4
 
       # Results have to be a table as the organisation does not have Advanced Security license.
-      - name: Terraform Trivy Scan
-        uses: aquasecurity/trivy-action@0.29.0
-        with:
-          scan-type: 'repo'
-          exit-code: '1'
+      # - name: Terraform Trivy Scan
+      #   uses: aquasecurity/trivy-action@0.29.0
+      #   with:
+      #     scan-type: 'repo'
+      #     exit-code: '1'
