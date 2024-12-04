@@ -1,0 +1,26 @@
+#Static Application Security Testing (SAST) with Trivy
+name: Validate with Trivy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  RunValidation:
+    name: Run SAST
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone the Repository
+        uses: actions/checkout@v4
+
+      - name: Trivy Scan
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: 'repo'
+          exit-code: '1'
