@@ -44,3 +44,4 @@ jobs:
         with:
           tag: ${{ steps.calculate.outputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          move_major_tag: 'true'
