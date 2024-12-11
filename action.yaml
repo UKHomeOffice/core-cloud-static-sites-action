@@ -4,9 +4,6 @@ inputs:
   assume-role-arn:
     description: 'Role assumed by the action.'
     required: true
-  bucket-name:
-    description: 'The name of the S3 Bucket.'
-    required: true
   working-directory:
     description: 'Folder the files will be synced from.'
     required: true
@@ -14,8 +11,8 @@ inputs:
     description: 'Number of seconds the information will be chached by CloudFront.'
     default: 86400
     required: false
-  cloudfront-distribution:
-    description: 'ID Name of CloudFront Distribution.'
+  domain:
+    description: ''
     required: true
   
 runs:
@@ -33,6 +30,8 @@ runs:
       shell: bash
       run: |
         cd ./${{ inputs.working-directory }}
-        aws s3 sync . s3://${{ inputs.bucket-name }}/ --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
-        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
+        export BUCKET_NAME=$(AWS_REGION=eu-west-2 aws ssm get-parameter --name /static-site/${{ inputs.domain }}/bucket  | jq .Parameter.Value -r)
+        export DISTRIBUTION=$(AWS_REGION=eu-west-2 aws ssm get-parameter --name /static-site/${{ inputs.domain }}/cloudfront  | jq .Parameter.Value -r)
+        aws s3 sync . s3://"$BUCKET_NAME"/ --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
+        aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION" --paths "/*"
 
