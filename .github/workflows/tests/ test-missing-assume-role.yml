@@ -1,0 +1,13 @@
+name: Test Missing Assume Role ARN
+on: workflow_dispatch
+jobs:
+  test-missing-arn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Static Sites Action without ARN
+        uses: UKHomeOffice/core-cloud-static-sites-action@main
+        with:
+          bucket-name: test-bucket
+          working-directory: ./site
+          cloudfront-distribution: TESTDISTID
