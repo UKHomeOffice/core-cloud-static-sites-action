@@ -1,0 +1,16 @@
+name: Test Missing Bucket Name
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-missing-bucket:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Static Sites Action without bucket-name
+        uses: UKHomeOffice/core-cloud-static-sites-action@CCL-763-testing
+        with:
+          assume-role-arn: arn:aws:iam::123456789012:role/TestRole
+          working-directory: ./site
+          cloudfront-distribution: TESTDISTID

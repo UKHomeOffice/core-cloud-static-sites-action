@@ -21,6 +21,26 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Validate Inputs
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.assume-role-arn }}" ]; then
+          echo "::error::Missing required input: assume-role-arn"
+          exit 1
+        fi
+        if [ -z "${{ inputs.bucket-name }}" ]; then
+          echo "::error::Missing required input: bucket-name"
+          exit 1
+        fi
+        if [ -z "${{ inputs.working-directory }}" ]; then
+          echo "::error::Missing required input: working-directory"
+          exit 1
+        fi
+        if [ -z "${{ inputs.cloudfront-distribution }}" ]; then
+          echo "::error::Missing required input: cloudfront-distribution"
+          exit 1
+        fi
+
     - uses: aws-actions/configure-aws-credentials@v4
       name: Configure AWS IdP Credentials
       with:
