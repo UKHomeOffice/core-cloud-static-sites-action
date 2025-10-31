@@ -14,3 +14,13 @@ jobs:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           bucket-name: test-bucket
           cloudfront-distribution: TESTDISTID
+
+
+      - name: Assert Missing Input Error
+        if: always()
+        run: |
+          echo "Checking logs..."
+          echo "${{ steps.run-action.outputs.logs }}" | grep "::error::Missing required input: working-directory" && \
+          echo "${{ steps.run-action.outputs.logs }}" | grep "Failure - Main Validate Inputs" && \
+          echo "✅ Assertion passed" || \
+          (echo "❌ Assertion failed" && exit 1)
