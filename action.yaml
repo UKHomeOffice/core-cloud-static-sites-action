@@ -11,7 +11,7 @@ inputs:
     description: 'Folder the files will be synced from.'
     required: true
   cache-control-s-max-age:
-    description: 'Number of seconds the information will be chached by CloudFront.'
+    description: 'Number of seconds the information will be cached by CloudFront.'
     default: 86400
     required: false
   cloudfront-distribution:
@@ -25,19 +25,19 @@ runs:
       shell: bash
       run: |
         if [ -z "${{ inputs.assume-role-arn }}" ]; then
-          echo "::error::Missing required input: assume-role-arn"
+          echo "Error: Missing required input: assume-role-arn"
           exit 1
         fi
         if [ -z "${{ inputs.bucket-name }}" ]; then
-          echo "::error::Missing required input: bucket-name"
+          echo "Error: Missing required input: bucket-name"
           exit 1
         fi
         if [ -z "${{ inputs.working-directory }}" ]; then
-          echo "::error::Missing required input: working-directory"
+          echo "Error: Missing required input: working-directory"
           exit 1
         fi
         if [ -z "${{ inputs.cloudfront-distribution }}" ]; then
-          echo "::error::Missing required input: cloudfront-distribution"
+          echo "Error: Missing required input: cloudfront-distribution"
           exit 1
         fi
 
