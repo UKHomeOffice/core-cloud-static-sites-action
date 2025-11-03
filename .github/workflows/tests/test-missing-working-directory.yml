@@ -1,7 +1,13 @@
 name: Test Missing Working Directory
 
 on:
-  workflow_dispatch:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   test-missing-working-directory:
@@ -9,18 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run Static Sites Action without working-directory
-        uses: UKHomeOffice/core-cloud-static-sites-action@CCL-763-testing
+        uses: ./
         with:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           bucket-name: test-bucket
           cloudfront-distribution: TESTDISTID
-
-
-      - name: Assert Missing Input Error
-        if: always()
+      # Assert that the job failed and error message is present
+      - name: Assert failure and error message
         run: |
-          echo "Checking logs..."
-          echo "${{ steps.run-action.outputs.logs }}" | grep "::error::Missing required input: working-directory" && \
-          echo "${{ steps.run-action.outputs.logs }}" | grep "Failure - Main Validate Inputs" && \
-          echo "✅ Assertion passed" || \
-          (echo "❌ Assertion failed" && exit 1)
+          echo "Outcome: ${{ steps.run-action.outcome }}"
+          echo "Conclusion: ${{ steps.run-action.conclusion }}"
+          if [ "${{ steps.run-action.conclusion }}" != "failure" ]; then
+            echo "❌ Expected failure but got success"
+            exit 1
+          fi

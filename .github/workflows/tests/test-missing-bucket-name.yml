@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-missing-bucket:
+  test-missing-bucket-name:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
