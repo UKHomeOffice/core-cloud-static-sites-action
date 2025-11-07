@@ -1,4 +1,5 @@
-from utils.act_test_utils import run_act_test
+from utils.act_test_utils import run_act_workflow, assert_output_contains
 
 def test_missing_arn():
-    run_act_test("test-missing-arn", "Missing required input: assume-role-arn")
+    logs = run_act_workflow("test-missing-arn")
+    assert_output_contains(logs, "Missing required input: assume-role-arn")

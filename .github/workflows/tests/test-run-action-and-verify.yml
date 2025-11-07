@@ -1,0 +1,25 @@
+name: Test File Sync to S3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-run-action-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl unzip
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws --version
+
+      - name: List Files in S3 Bucket
+        env:
+          BUCKET: cc-static-site-staticsite-elliotthrynacz-test-site
+          AWS_PAGER: ""
+        run: |
+          echo "Listing files in bucket: $BUCKET"
+          aws s3api list-objects-v2 --bucket "$BUCKET" --query 'Contents[].Key' --output text

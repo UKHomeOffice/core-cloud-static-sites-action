@@ -1,4 +1,5 @@
-from utils.act_test_utils import run_act_test
+from utils.act_test_utils import run_act_workflow, assert_output_contains
 
 def test_missing_cloudfront_distribution():
-    run_act_test("test-missing-cloudfront-distribution", "Missing required input: cloudfront-distribution")
+    logs = run_act_workflow("test-missing-cloudfront-distribution")
+    assert_output_contains(logs, "Missing required input: cloudfront-distribution")

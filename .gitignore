@@ -1,1 +1,2 @@
 .github/workflows/tests/pytest/__pycache__/
+.github/workflows/tests/pytest/utils/__pycache__/
