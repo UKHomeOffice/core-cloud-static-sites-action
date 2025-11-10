@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Static site hosted on AWS S3 with CloudFront and Route 53" />
+  <meta name="author" content="Elliott Hrynacz" />
+  <meta name="keywords" content="AWS, S3, CloudFront, Route 53, Static Website" />
+  <title>My Static AWS Site</title>
+
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f8f9fa;
+      color: #222;
+    }
+    nav {
+      background: #232f3e;
+      padding: 1em 0;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 1em;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: #ff9900;
+    }
+    .hero {
+      background: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      color: #fff;
+      padding: 5em 2em 3em 2em;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 1.5s;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(35,47,62,0.7);
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2em;
+      margin: 3em 0;
+    }
+    .feature {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 2em;
+      max-width: 300px;
+      text-align: center;
+      transition: transform 0.2s;
+      animation: fadeInUp 1s;
+    }
+    .feature:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    footer {
+      background: #232f3e;
+      color: #fff;
+      text-align: center;
+      padding: 1em 0;
+      margin-top: 3em;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to My Static Site</h1>
+      <p>Hosted on AWS S3, delivered via CloudFront, and routed with Route 53.</p>
+      <p><strong>Version 2.0</strong></p>
+      <a href="#features" style="background:#ff9900;color:#fff;padding:0.7em 1.5em;border-radius:4px;text-decoration:none;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.09);margin-top:1em;display:inline-block;">Explore Features</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="about">
+      <h2>About This Site</h2>
+      <p>This is a simple static website deployed using AWS services. It demonstrates how to use S3 for hosting, CloudFront for fast delivery, and Route 53 for custom domain routing.</p>
+    </section>
+
+    <section id="features" class="features">
+      <div class="feature">
+        <h3>🚀 Fast Delivery</h3>
+        <p>CloudFront ensures your site loads quickly from anywhere in the world.</p>
+      </div>
+      <div class="feature">
+        <h3>🔒 Secure Hosting</h3>
+        <p>All content is served securely over HTTPS with AWS managed certificates.</p>
+      </div>
+      <div class="feature">
+        <h3>🌎 Custom Domain</h3>
+        <p>Route 53 lets you use your own domain name for a professional touch.</p>
+      </div>
+    </section>
+
+    <section id="contact" style="text-align:center;margin:3em 0;">
+      <h2>Contact</h2>
+      <p>Questions or feedback? <a href="mailto:elliott.hrynacz@example.com">Email me</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Elliott Hrynacz &mdash; Powered by <a href="https://aws.amazon.com/" style="color:#ff9900;text-decoration:none;">AWS</a></p>
+  </footer>
+</body>
+</html>

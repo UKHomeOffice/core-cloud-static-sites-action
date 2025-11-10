@@ -1,0 +1,29 @@
+name: Test File Sync to S3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-run-action:
+    runs-on: ubuntu-latest
+    env:
+      AWS_PAGER: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl unzip
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws --version
+
+      - name: Run Static Sites Action
+        uses: ./
+        with:
+          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
+          working-directory: .github/workflows/tests/static-site
+          cloudfront-distribution: E39K1BO4OKXJ30
