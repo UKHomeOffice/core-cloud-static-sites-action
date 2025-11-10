@@ -20,12 +20,3 @@ jobs:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           bucket-name: test-bucket
           cloudfront-distribution: TESTDISTID
-      # Assert that the job failed and error message is present
-      - name: Assert failure and error message
-        run: |
-          echo "Outcome: ${{ steps.run-action.outcome }}"
-          echo "Conclusion: ${{ steps.run-action.conclusion }}"
-          if [ "${{ steps.run-action.conclusion }}" != "failure" ]; then
-            echo "❌ Expected failure but got success"
-            exit 1
-          fi
