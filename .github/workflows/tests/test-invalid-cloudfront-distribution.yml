@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-run-action:
+  test-invalid-cloudfront-distribution:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,4 +24,4 @@ jobs:
           assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
           working-directory: .github/workflows/tests/static-site
-          cloudfront-distribution: E39K1BO4OKXJ30
+          cloudfront-distribution: INVALID123

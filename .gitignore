@@ -1,2 +1,3 @@
 .github/workflows/tests/pytest/__pycache__/
 .github/workflows/tests/pytest/utils/__pycache__/
+.github/workflows/tests/.DS_Store
