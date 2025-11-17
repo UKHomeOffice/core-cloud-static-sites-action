@@ -12,19 +12,28 @@ on:
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    strategy:
+      matrix:
+        python-version: ["3.11"]
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Lint with Ruff
+        run: |
+          pip install ruff
+          ruff --format=github --target-version=py311 .
+        continue-on-error: true
 
       - name: Authenticate GitHub CLI
         run: |
