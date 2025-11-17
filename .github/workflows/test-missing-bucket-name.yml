@@ -1,7 +1,7 @@
 name: Test Missing Bucket Name
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   test-missing-bucket-name:
