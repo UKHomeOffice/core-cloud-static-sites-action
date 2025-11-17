@@ -35,4 +35,4 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Run pytests
-        run: pytest .github/workflows/tests/pytest/test_working-directory.py
+        run: pytest .github/workflows/tests/pytest/test_missing_working_directory.py
