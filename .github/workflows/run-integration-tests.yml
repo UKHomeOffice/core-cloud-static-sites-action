@@ -26,12 +26,13 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
-      - name: Trigger workflow and wait
+      - name: Trigger workflow
         run: |
-          gh workflow run test-missing-working-directory.yml--ref ${{ github.ref }}
+          gh workflow run test-missing-working-directory.yml --ref ${{ github.ref }}
           sleep 10
-          gh run list --workflow test-missing-working-directory.yml --json conclusion,id
-          # Optionally poll until success
+          RUN_ID=$(gh run list --workflow test-missing-working-directory.yml --json databaseId --jq '.[0].databaseId')
+          gh run view $RUN_ID --log > workflow.log
+        continue-on-error: true
 
       - name: Fetch logs for validation
         run: |
