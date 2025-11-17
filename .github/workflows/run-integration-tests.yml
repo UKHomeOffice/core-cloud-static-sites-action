@@ -44,4 +44,5 @@ jobs:
           pytest \
             .github/workflows/tests/pytest/test_missing_working_directory.py \
             .github/workflows/tests/pytest/test_missing_cloudfront_distribution.py \
-            .github/workflows/tests/pytest/test_missing_bucket_name.py
+            .github/workflows/tests/pytest/test_missing_bucket_name.py \
+            .github/workflows/tests/pytest/test_invalid_cloudfront_distribution.py
