@@ -41,9 +41,9 @@ jobs:
 
       - name: Trigger workflow
         run: |
-          gh workflow run test-missing-working-directory.yml --ref ${{ github.ref }}
+          gh workflow run "test-missing-working-directory.yml" --ref "CCL-763-testing"
           sleep 10
-          RUN_ID=$(gh run list --workflow test-missing-working-directory.yml --json databaseId --jq '.[0].databaseId')
+          RUN_ID=$(gh run list --workflow "test-missing-working-directory.yml" --json databaseId --jq '.[0].databaseId')
           gh run view $RUN_ID --log > workflow.log
         continue-on-error: true
 
