@@ -9,9 +9,10 @@ on:
       - reopened
       - synchronize
 
-
 permissions:
   contents: read
+  actions: write
+  workflow: write  
 
 jobs:
   integration-tests:
@@ -22,6 +23,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set workflow permissions
+        uses: actions/github-script@v6
+        with:
+          script: |
+        permissions:
+          contents: read
+          actions: write
+          workflow: write
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
