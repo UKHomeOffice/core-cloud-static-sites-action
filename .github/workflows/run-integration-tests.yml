@@ -49,7 +49,7 @@ jobs:
 
       - name: Fetch logs for validation
         run: |
-          gh run view <run-id> --log > workflow.log
+          gh run view $RUN_ID --log > workflow.log
 
       - name: Run pytest validations
         run: pytest .github/workflows/tests/pytest/test_working-directory.py
