@@ -30,7 +30,7 @@ jobs:
         run: |
           gh workflow run test-missing-arn.yml --ref ${{ github.ref }}
           sleep 10
-          gh run list --workflow test-missing-arn.yml --json conclusion,id
+          gh run list --workflow test-missing-working-directory.yml --json conclusion,id
           # Optionally poll until success
 
       - name: Fetch logs for validation
@@ -38,4 +38,4 @@ jobs:
           gh run view <run-id> --log > workflow.log
 
       - name: Run pytest validations
-        run: pytest .github/workflows/tests/pytest/test_missing_arn.py
+        run: pytest .github/workflows/tests/pytest/test_working-directory.py
