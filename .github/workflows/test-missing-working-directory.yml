@@ -1,7 +1,7 @@
 name: Test Missing Working Directory
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   test-missing-working-directory:

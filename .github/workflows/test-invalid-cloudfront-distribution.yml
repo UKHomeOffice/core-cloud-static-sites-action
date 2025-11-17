@@ -1,7 +1,7 @@
-name: Test File Sync to S3
+name: Test Invalid CloudFront Distribution
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   test-invalid-cloudfront-distribution:
