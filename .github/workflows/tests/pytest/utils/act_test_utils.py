@@ -143,7 +143,6 @@ def md5_checksum(file_path):
 
 def verify_file_integrity(file_key: str, local_file_path: str):
     s3 = connect_to_s3()
-    # Download S3 file to temp and compute MD5
     s3.download_file(bucket_name, file_key, "/tmp/s3_file")
     s3_md5 = md5_checksum("/tmp/s3_file")
     local_md5 = md5_checksum(local_file_path)
@@ -172,7 +171,6 @@ def verify_s3_headers(file_key: str, expected_headers: dict):
 def test_bucket_permissions():
     s3 = connect_to_s3()
 
-    # Check bucket ACL
     acl = s3.get_bucket_acl(Bucket=bucket_name)
     public_grantees = [
         g for g in acl["Grants"]
@@ -183,7 +181,6 @@ def test_bucket_permissions():
     ]
     assert not public_grantees, f"❌ Bucket {bucket_name} ACL allows public access!"
 
-    # Check bucket policy
     try:
         policy = s3.get_bucket_policy(Bucket=bucket_name)
         policy_doc = json.loads(policy["Policy"])
@@ -191,5 +188,8 @@ def test_bucket_permissions():
             if statement.get("Effect") == "Allow" and statement.get("Principal") == "*":
                 assert False, f"❌ Bucket {bucket_name} policy allows public access!"
     except s3.exceptions.NoSuchBucketPolicy:
-        # No policy is fine if ACL is private
         pass
+
+def get_workflow_logs(workflow_name):
+    with open("workflow.log") as f:
+        return f.read()

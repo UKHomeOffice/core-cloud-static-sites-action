@@ -1,0 +1,39 @@
+name: Integration Workflow Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Authenticate GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Trigger workflow and wait
+        run: |
+          gh workflow run test-missing-arn.yml --ref ${{ github.ref }}
+          sleep 10
+          gh run list --workflow test-missing-arn.yml --json conclusion,id
+          # Optionally poll until success
+
+      - name: Fetch logs for validation
+        run: |
+          gh run view <run-id> --log > workflow.log
+
+      - name: Run pytest validations
+        run: pytest .github/workflows/tests/pytest/test_missing_arn.py
