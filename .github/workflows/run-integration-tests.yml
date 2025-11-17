@@ -1,7 +1,9 @@
 name: Integration Workflow Tests
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - CCL-763-testing
 
 jobs:
   integration-tests:
