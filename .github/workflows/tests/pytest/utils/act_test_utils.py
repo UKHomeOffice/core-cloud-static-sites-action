@@ -50,7 +50,7 @@ def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
 
 
 def trigger_workflow(workflow_name: str):
-    subprocess.run(["gh", "workflow", "run", workflow_name, "--ref CCL-763-testing"], check=True)
+    subprocess.run(["gh", "workflow", "run", workflow_name, "--ref=CCL-763-testing"], check=True)
     time.sleep(10)  # initial wait
     for _ in range(10):  # poll up to ~100s
         result = subprocess.run(
