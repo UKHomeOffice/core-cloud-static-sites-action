@@ -30,9 +30,5 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest boto3
 
-      - name: Authenticate GitHub CLI
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
       - name: Run pytests
         run: pytest .github/workflows/tests/pytest/test_missing_working_directory.py
