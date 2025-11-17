@@ -14,3 +14,6 @@ jobs:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           bucket-name: test-bucket
           cloudfront-distribution: TESTDISTID
+
+      - name: Mark job as success
+        run: exit 0
