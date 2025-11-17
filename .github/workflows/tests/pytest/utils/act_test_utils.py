@@ -13,12 +13,12 @@ bucket_name = "cc-static-site-staticsite-elliotthrynacz-test-site"
 folder_path = '.github/workflows/tests/static-site'
 
 def connect_to_s3():
-    session = boto3.Session(profile_name='static-site-test')
+    session = boto3.Session()
     s3 = session.client("s3")
     return s3
 
 def connect_to_cloudfront():
-    session = boto3.Session(profile_name="static-site-test")
+    session = boto3.Session()
     client = session.client("cloudfront")
     return client
 

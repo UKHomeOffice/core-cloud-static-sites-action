@@ -1,7 +1,7 @@
-from utils.act_test_utils import run_act_workflow, assert_files_exist_in_s3
+from utils.act_test_utils import trigger_workflow, assert_files_exist_in_s3
 
 def test_verify_files_are_present():
-    run_act_workflow("test-run-action", expect_failure=False)
+    trigger_workflow("test-run-action.yml")
 
     expected_files = [
         "index.html",
