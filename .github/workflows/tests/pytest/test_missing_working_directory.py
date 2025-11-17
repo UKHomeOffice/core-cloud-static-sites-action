@@ -1,7 +1,6 @@
-from utils.act_test_utils import run_act_workflow, assert_output_contains, get_workflow_logs
+from utils.act_test_utils import run_act_workflow, assert_output_contains, trigger_workflow, fetch_logs
 
 def test_missing_working_directory():
-    # logs = run_act_workflow("test-missing-working-directory")
-    with open("workflow.log") as f:
-        logs = f.read()
+    run_id = trigger_workflow("test-missing-working-directory.yml", "CCL-763-testing")
+    logs = fetch_logs(run_id)
     assert_output_contains(logs, "Missing required input: working-directory")

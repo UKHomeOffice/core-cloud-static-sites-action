@@ -28,38 +28,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Lint with Ruff
-        run: |
-          pip install ruff
-          ruff --format=github --target-version=py311 .
-        continue-on-error: true
+          pip install pytest
 
       - name: Authenticate GitHub CLI
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Trigger workflow
-        run: |
-          gh workflow run "test-missing-working-directory.yml" --ref "CCL-763-testing"
-          sleep 10
-          RUN_ID=$(gh run list --workflow "test-missing-working-directory.yml" --json databaseId --jq '.[0].databaseId')
-
-          if [ -n "$RUN_ID" ]; then
-            echo "Run ID is: $RUN_ID"
-          else
-            echo "Run ID not found yet"
-            exit 1
-          fi
-
-          echo "RUN_ID=$RUN_ID"
-
-          gh run view $RUN_ID --log > workflow.log
-        continue-on-error: true
-
-      - name: Fetch logs for validation
-        run: |
-          gh run view $RUN_ID --log > workflow.log
 
       - name: Run pytest validations
         run: pytest .github/workflows/tests/pytest/test_working-directory.py

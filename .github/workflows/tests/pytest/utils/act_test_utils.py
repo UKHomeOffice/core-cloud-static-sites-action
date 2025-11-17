@@ -6,6 +6,7 @@ import boto3
 from botocore.exceptions import ClientError 
 import logging
 import os
+import time
 
 LOGGER = logging.getLogger(__name__)
 bucket_name = "cc-static-site-staticsite-elliotthrynacz-test-site"
@@ -46,6 +47,26 @@ def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
         raise AssertionError(f"❌ Expected success, got exit code {result.returncode}")
 
     return result.stdout
+
+
+def trigger_workflow(workflow_name: str):
+    subprocess.run(["gh", "workflow", "run", workflow_name, "--ref CCL-763-testing"], check=True)
+    time.sleep(10)  # initial wait
+    for _ in range(10):  # poll up to ~100s
+        result = subprocess.run(
+            ["gh", "run", "list", "--workflow", workflow_name, "--json", "databaseId,status"],
+            capture_output=True, text=True, check=True
+        )
+        runs = json.loads(result.stdout)
+        if runs and runs[0]["status"] not in ["queued", "in_progress"]:
+            return runs[0]["databaseId"]
+        time.sleep(10)
+    raise RuntimeError("Workflow did not finish in time")
+
+def fetch_logs(run_id):
+    result = subprocess.run(["gh", "run", "view", str(run_id), "--log"], capture_output=True, text=True)
+    return result.stdout
+
 
 def assert_output_contains(string: str, expected_error: str):
     if expected_error not in string:
