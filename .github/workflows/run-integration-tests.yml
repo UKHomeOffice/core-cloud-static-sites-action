@@ -2,8 +2,12 @@ name: Integration Workflow Tests
 
 on:
   pull_request:
-    branches:
-      - 'CCL-763-testing'
+    types:
+      - labeled
+      - unlabeled
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   integration-tests:
