@@ -60,8 +60,6 @@ def trigger_workflow(workflow_name: str):
         runs = json.loads(result.stdout)
         if runs and runs[0]["status"] not in ["queued", "in_progress"]:
             return runs[0]["databaseId"]
-        time.sleep(10)
-    raise RuntimeError("Workflow did not finish in time")
 
 def fetch_logs(run_id):
     result = subprocess.run(["gh", "run", "view", str(run_id), "--log"], capture_output=True, text=True)
@@ -70,7 +68,7 @@ def fetch_logs(run_id):
 
 def assert_output_contains(string: str, expected_error: str):
     if expected_error not in string:
-        raise AssertionError(f"❌ Expected error message '{expected_error}' not found in logs")
+        raise AssertionError(f"❌ Expected error message '{expected_error}' not found in logs: {string}")
 
     LOGGER.info(f"✅ Output contains expected error: '{expected_error}'")
 
