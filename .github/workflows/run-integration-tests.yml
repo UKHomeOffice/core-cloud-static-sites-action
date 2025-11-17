@@ -28,7 +28,7 @@ jobs:
 
       - name: Trigger workflow and wait
         run: |
-          gh workflow run test-missing-arn.yml --ref ${{ github.ref }}
+          gh workflow run test-missing-working-directory.yml--ref ${{ github.ref }}
           sleep 10
           gh run list --workflow test-missing-working-directory.yml --json conclusion,id
           # Optionally poll until success
