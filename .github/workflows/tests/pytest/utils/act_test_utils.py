@@ -109,24 +109,6 @@ def delete_file(file_name: str):
     except FileNotFoundError:
         LOGGER.warning(f"File '{file_path}' not found.")
 
-
-def assert_cache_control_header(file_key: str, expected_s_maxage: str):
-    s3 = connect_to_s3()
-
-    LOGGER.info(f"Checking Cache-Control header for '{file_key}'...")
-    try:
-        response = s3.head_object(Bucket=bucket_name, Key=file_key)
-        cache_control = response.get("CacheControl", "")
-        expected_directive = f"s-maxage={expected_s_maxage}"
-
-        if expected_directive in cache_control:
-            LOGGER.info(f"✅ Cache-Control header contains '{expected_directive}' as expected.")
-        else:
-            raise AssertionError(f"❌ Cache-Control header missing expected directive: '{expected_directive}'\nActual: '{cache_control}'")
-    except ClientError as e:
-        LOGGER.error(f"⚠️ Error accessing file '{file_key}': {e}")
-
-
 def validate_latest_invalidation(distribution_id: str, max_age_seconds: int = 60):
 
     client = connect_to_cloudfront()
