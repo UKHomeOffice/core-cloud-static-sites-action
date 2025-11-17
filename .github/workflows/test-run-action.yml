@@ -1,7 +1,7 @@
 name: Test File Sync to S3
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   test-run-action:
