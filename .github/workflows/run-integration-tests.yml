@@ -3,7 +3,7 @@ name: Integration Workflow Tests
 on:
   pull_request:
     branches:
-      - CCL-763-testing
+      - 'CCL-763-testing'
 
 jobs:
   integration-tests:
