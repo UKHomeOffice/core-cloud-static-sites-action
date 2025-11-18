@@ -212,28 +212,30 @@ def verify_s3_headers(file_key: str, expected_headers: dict):
         raise AssertionError(f"❌ Header check failed: {mismatches}")
     LOGGER.info("✅ Header check passed!")
 
-
 def test_bucket_permissions():
     s3 = connect_to_s3()
+    LOGGER.info(f"Checking bucket ACL and policy for public access: {bucket_name}")
 
+    # Check ACL
     acl = s3.get_bucket_acl(Bucket=bucket_name)
     public_grantees = [
-        g for g in acl["Grants"]
-        if g["Grantee"].get("URI") in [
+        g for g in acl.get("Grants", [])
+        if g.get("Grantee", {}).get("URI") in [
             "http://acs.amazonaws.com/groups/global/AllUsers",
             "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
         ]
     ]
-    assert not public_grantees, f"❌ Bucket {bucket_name} ACL allows public access!"
+    assert not public_grantees, f"❌ Bucket {bucket_name} ACL allows public access: {public_grantees}"
 
+    # Check bucket policy
     try:
         policy = s3.get_bucket_policy(Bucket=bucket_name)
         policy_doc = json.loads(policy["Policy"])
         for statement in policy_doc.get("Statement", []):
             if statement.get("Effect") == "Allow" and statement.get("Principal") == "*":
-                assert False, f"❌ Bucket {bucket_name} policy allows public access!"
+                assert False, f"❌ Bucket {bucket_name} policy allows public access: {statement}"
     except s3.exceptions.NoSuchBucketPolicy:
-        pass
+        LOGGER.info("✅ No bucket policy found (safe)")
 
 def get_workflow_logs(workflow_name):
     with open("workflow.log") as f:
