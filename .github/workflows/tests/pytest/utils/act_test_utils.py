@@ -73,7 +73,7 @@ def fetch_logs(run_id):
         return ""
 
     # Use the first job (or loop if multiple)
-    job_id = jobs[0]["id"]
+    job_id = jobs[0]["databaseId"]
 
     # Fetch logs for the job
     logs_result = subprocess.run(
