@@ -22,6 +22,7 @@ jobs:
       - name: Run Static Sites Action
         uses: ./
         with:
+          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
           working-directory: .github/workflows/tests/static-site
           cloudfront-distribution: E39K1BO4OKXJ30
