@@ -23,32 +23,6 @@ def connect_to_cloudfront():
     client = session.client("cloudfront")
     return client
 
-def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
-    LOGGER.info(f"Running act for job: {job_name}")
-    command = (
-        f"act -j {job_name} "
-        f"--env-file <(aws configure export-credentials --format env --profile static-site-test) "
-        f"--container-architecture linux/amd64"
-    )
-    result = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-        shell=True,
-        executable="/bin/bash"
-    )
-
-    LOGGER.info("Exit code: %d", result.returncode)
-    LOGGER.info("STDOUT:\n%s", result.stdout)
-    LOGGER.info("STDERR:\n%s", result.stderr)
-
-    if expect_failure and result.returncode != 1:
-        raise AssertionError(f"❌ Expected failure, got exit code {result.returncode}")
-    elif not expect_failure and result.returncode != 0:
-        raise AssertionError(f"❌ Expected success, got exit code {result.returncode}")
-
-    return result.stdout
-
 def trigger_workflow(workflow_name: str, branch_name: str = "main"):
     test_name = inspect.stack()[1].function
     subprocess.run([
@@ -77,24 +51,33 @@ def trigger_workflow(workflow_name: str, branch_name: str = "main"):
         raise RuntimeError(f"Could not find workflow run for {workflow_name} on branch {branch_name}")
     return run_id
 
-def fetch_logs(run_id):
-    # Wait until run completes
-    for _ in range(30):
-        status_result = subprocess.run(
-            ["gh", "run", "view", str(run_id), "--json", "status"],
+
+def fetch_logs(run_id, timeout=300, interval=5):
+    elapsed = 0
+    while elapsed < timeout:
+        try:
+            status_result = subprocess.run(
+                ["gh", "run", "view", str(run_id), "--json", "status"],
+                capture_output=True, text=True, check=True
+            )
+            status_data = json.loads(status_result.stdout)
+            if status_data.get("status") == "completed":
+                break
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Failed to check run status: {e}")
+        time.sleep(interval)
+        elapsed += interval
+    else:
+        raise TimeoutError(f"Run {run_id} did not complete within {timeout} seconds")
+
+    try:
+        logs_result = subprocess.run(
+            ["gh", "run", "view", str(run_id), "--log"],
             capture_output=True, text=True, check=True
         )
-        status = json.loads(status_result.stdout).get("status")
-        if status == "completed":
-            break
-        time.sleep(5)
-
-    # Fetch logs
-    logs_result = subprocess.run(
-        ["gh", "run", "view", str(run_id), "--log"],
-        capture_output=True, text=True, check=True
-    )
-    return logs_result.stdout
+        return logs_result.stdout
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to fetch logs: {e}")
 
 def assert_output_contains(string: str, expected_error: str):
     if expected_error not in string:
@@ -196,7 +179,6 @@ def verify_file_integrity(file_key: str, local_file_path: str):
         raise AssertionError(f"❌ Integrity check failed for {file_key}. "
                              f"Local MD5: {local_md5}, S3 MD5: {s3_md5}")
     LOGGER.info("✅ Integrity check passed!")
-
 
 def verify_s3_headers(file_key: str, expected_headers: dict):
     s3 = connect_to_s3()
