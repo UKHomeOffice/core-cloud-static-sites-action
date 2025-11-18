@@ -52,7 +52,7 @@ def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
 def trigger_workflow(workflow_name: str, branch_name: str = "main"):
     test_name = inspect.stack()[1].function
     subprocess.run([
-        "gh", "workflow", "run", workflow_name, f"--ref={branch_name}", "--field", f"test_name={test_name}"
+        "gh", "workflow", "run", workflow_name, f"--ref={branch_name}", 
     ], check=True)
 
     time.sleep(10)
@@ -101,33 +101,27 @@ def assert_output_contains(string: str, expected_error: str):
 
     LOGGER.info(f"✅ Output contains expected error: '{expected_error}'")
 
-
-def assert_file_in_s3(file_key: str, should_exist: bool, retries: int = 10, delay: int = 5):
+def assert_file_in_s3(file_key: str, should_exist: bool):
     s3 = connect_to_s3()
+
     LOGGER.info(f"Checking for {'presence' if should_exist else 'absence'} of file '{file_key}' in S3 bucket...")
 
-    for attempt in range(retries):
-        try:
-            s3.head_object(Bucket=bucket_name, Key=file_key)
+    try:
+        s3.head_object(Bucket=bucket_name, Key=file_key)
+        if should_exist:
+            LOGGER.info(f"✅ File '{file_key}' is present in the S3 bucket as expected.")
+        else:
+            raise AssertionError(f"❌ File '{file_key}' unexpectedly found in S3 bucket")
+    except ClientError as e:
+        error_code = e.response['Error']['Code']
+        if error_code == '404':
             if should_exist:
-                LOGGER.info(f"✅ File '{file_key}' is present in the S3 bucket as expected.")
-                return
+                raise AssertionError(f"❌ File '{file_key}' not found in S3 bucket but was expected.")
             else:
-                raise AssertionError(f"❌ File '{file_key}' unexpectedly found in S3 bucket")
-        except ClientError as e:
-            error_code = e.response['Error']['Code']
-            if error_code == '404':
-                if should_exist:
-                    LOGGER.warning(f"Attempt {attempt+1}/{retries}: File '{file_key}' not found. Retrying in {delay}s...")
-                    time.sleep(delay)
-                    continue
-                else:
-                    LOGGER.info(f"✅ File '{file_key}' is not present in the S3 bucket as expected.")
-                    return
-            else:
-                LOGGER.error(f"⚠️ Unexpected error when checking file: {e}")
-                raise
-    raise AssertionError(f"❌ File '{file_key}' not found in S3 bucket after {retries} retries but was expected.")
+                LOGGER.info(f"✅ File '{file_key}' is not present in the S3 bucket as expected.")
+        else:
+            LOGGER.error(f"⚠️ Unexpected error when checking file: {e}")
+            raise
 
 
 def assert_files_exist_in_s3(expected_files: list):
