@@ -1,4 +1,4 @@
-from utils.act_test_utils import run_act_workflow, verify_s3_headers
+from utils.act_test_utils import verify_s3_headers
 
 def test_verify_file_headers():
     verify_s3_headers("index.html", {
