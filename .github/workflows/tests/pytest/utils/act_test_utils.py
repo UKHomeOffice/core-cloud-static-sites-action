@@ -206,7 +206,7 @@ def verify_s3_headers(file_key: str, expected_headers: dict):
         raise AssertionError(f"❌ Header check failed: {mismatches}")
     LOGGER.info("✅ Header check passed!")
 
-def test_bucket_permissions():
+def assert_bucket_permissions():
     s3 = connect_to_s3()
     LOGGER.info(f"Checking bucket ACL and policy for public access: {bucket_name}")
 
