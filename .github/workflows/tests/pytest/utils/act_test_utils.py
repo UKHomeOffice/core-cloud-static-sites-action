@@ -155,6 +155,17 @@ def delete_file(file_name: str):
     except FileNotFoundError:
         LOGGER.warning(f"File '{file_path}' not found.")
 
+def assert_file_in_folder(file_name: str, should_exist: bool):
+    file_path = os.path.join(folder_path, file_name)
+    exists = os.path.isfile(file_path)
+
+    if should_exist and not exists:
+        raise AssertionError(f"❌ File '{file_name}' does not exist in folder '{folder_path}' but was expected.")
+    elif not should_exist and exists:
+        raise AssertionError(f"❌ File '{file_name}' exists in folder '{folder_path}' but should NOT.")
+    
+    LOGGER.info(f"✅ File '{file_name}' {'exists' if exists else 'does not exist'} in folder '{folder_path}' as expected.")
+
 def validate_latest_invalidation(distribution_id: str, max_age_seconds: int = 60):
 
     client = connect_to_cloudfront()
