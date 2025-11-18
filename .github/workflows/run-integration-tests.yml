@@ -57,6 +57,7 @@ jobs:
             .github/workflows/tests/pytest/test_verify_cloudfront_invalidation_success.py \
             .github/workflows/tests/pytest/test_invalid_cloudfront_distribution.py \
             .github/workflows/tests/pytest/test_verify_file_integrity.py \
-            .github/workflows/tests/pytest/test_verify_file_headers.py \
-            .github/workflows/tests/pytest/test_verify_bucket_permissions.py
+            .github/workflows/tests/pytest/test_verify_bucket_permissions.py \
+            .github/workflows/tests/pytest/test_verify_file_headers.py |
 
+  

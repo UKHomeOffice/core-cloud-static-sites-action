@@ -233,9 +233,15 @@ def test_bucket_permissions():
         policy_doc = json.loads(policy["Policy"])
         for statement in policy_doc.get("Statement", []):
             if statement.get("Effect") == "Allow" and statement.get("Principal") == "*":
-                assert False, f"❌ Bucket {bucket_name} policy allows public access: {statement}"
-    except s3.exceptions.NoSuchBucketPolicy:
-        LOGGER.info("✅ No bucket policy found (safe)")
+                raise AssertionError(f"❌ Bucket {bucket_name} policy allows public access: {statement}")
+        LOGGER.info(f"✅ Bucket {bucket_name} policy does not allow public access.")
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchBucketPolicy':
+            LOGGER.info("✅ No bucket policy found (as expected).")
+        else:
+            LOGGER.error(f"⚠️ Unexpected error when checking bucket policy: {e}")
+            raise
+
 
 def get_workflow_logs(workflow_name):
     with open("workflow.log") as f:
