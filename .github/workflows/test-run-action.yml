@@ -1,8 +1,13 @@
 name: Test File Sync to S3
-run-name: Test File Sync to S3 - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 on:
   workflow_dispatch:
+    inputs:
+      test_name:
+        description: "Name of the test triggering this workflow"
+        required: true
+
+run-name: Test File Sync to S3 - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 permissions:
   id-token: write
