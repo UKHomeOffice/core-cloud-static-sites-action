@@ -149,7 +149,7 @@ def assert_file_in_folder(file_name: str, should_exist: bool):
     
     LOGGER.info(f"✅ File '{file_name}' {'exists' if exists else 'does not exist'} in folder '{folder_path}' as expected.")
 
-def validate_latest_invalidation(distribution_id: str, max_age_seconds: int = 240):
+def validate_latest_invalidation(distribution_id: str, max_age_seconds: int = 60):
 
     client = connect_to_cloudfront()
 

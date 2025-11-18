@@ -6,7 +6,6 @@ on:
       test_name:
         description: "Name of the test triggering this workflow"
         required: true
-
 run-name: Run Static Sites Action - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 permissions:

@@ -9,7 +9,6 @@ on:
       - reopened
       - synchronize
 
-
 permissions:
   contents: read
   actions: write
