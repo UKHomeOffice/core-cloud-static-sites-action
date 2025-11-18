@@ -19,12 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create test file if requested
-        run: |
-          if [ "${{ inputs.test_name }}" = "test_verify_files_are_present" ]; then
-            echo "Test file" > .github/workflows/tests/static-site/delete.txt
-          fi
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
