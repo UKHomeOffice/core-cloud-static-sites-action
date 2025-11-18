@@ -52,19 +52,31 @@ def trigger_workflow(workflow_name: str, branch_name: str = "main"):
     subprocess.run([
         "gh", "workflow", "run", workflow_name, f"--ref={branch_name}"
     ], check=True)
+
     time.sleep(10)
-    for _ in range(10):
+    run_id = None
+    for _ in range(20):  # Increase retries
         result = subprocess.run(
-            ["gh", "run", "list", "--workflow", workflow_name, "--json", "databaseId,status"],
+            ["gh", "run", "list", "--workflow", workflow_name, "--json", "databaseId,headBranch,status"],
             capture_output=True, text=True, check=True
         )
         runs = json.loads(result.stdout)
-        if runs and runs[0]["status"] not in ["queued", "in_progress"]:
-            return runs[0]["databaseId"]
+        # Find the run for the correct branch
+        for run in runs:
+            if run["headBranch"] == branch_name:
+                run_id = run["databaseId"]
+                break
+        if run_id:
+            break
+        time.sleep(5)
+
+    if not run_id:
+        raise RuntimeError(f"Could not find workflow run for {workflow_name} on branch {branch_name}")
+    return run_id
 
 def fetch_logs(run_id):
     # Wait until run completes
-    for _ in range(10):
+    for _ in range(30):
         status_result = subprocess.run(
             ["gh", "run", "view", str(run_id), "--json", "status"],
             capture_output=True, text=True, check=True
