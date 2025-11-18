@@ -1,4 +1,4 @@
-name: Test File Sync to S3
+name: Run Static Sites Action
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
         description: "Name of the test triggering this workflow"
         required: true
 
-run-name: Test File Sync to S3 - ${{ inputs.test_name }} - ${{ github.run_number }}
+run-name: Run Static Sites Action - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 permissions:
   id-token: write

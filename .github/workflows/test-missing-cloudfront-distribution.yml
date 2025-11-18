@@ -2,6 +2,11 @@ name: Test Missing CloudFront Distribution
 
 on:
   workflow_dispatch:
+    inputs:
+      test_name:
+        description: "Name of the test triggering this workflow"
+        required: true
+run-name: Test Missing CloudFront Distribution - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 jobs:
   test-missing-cloudfront-distribution:

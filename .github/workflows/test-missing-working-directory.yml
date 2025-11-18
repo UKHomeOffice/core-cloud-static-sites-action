@@ -2,6 +2,11 @@ name: Test Missing Working Directory
 
 on:
   workflow_dispatch:
+    inputs:
+      test_name:
+        description: "Name of the test triggering this workflow"
+        required: true
+run-name: Test Missing Working Directory - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 jobs:
   test-missing-working-directory:
