@@ -1,7 +1,5 @@
-from utils.act_test_utils import run_act_workflow, validate_latest_invalidation
+from utils.act_test_utils import trigger_workflow, validate_latest_invalidation
 
 def test_verify_cloudfront_invalidation_success():
-    run_act_workflow("test-run-action", expect_failure=False)
+    trigger_workflow("test-run-action.yml")
     validate_latest_invalidation("E39K1BO4OKXJ30")
-
- 

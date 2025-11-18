@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run Static Sites Action without bucket-name
-        uses: UKHomeOffice/core-cloud-static-sites-action@CCL-763-testing
+        uses: ./
         with:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           working-directory: ./site
