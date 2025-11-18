@@ -3,16 +3,25 @@ name: Test File Sync to S3
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   test-run-action:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          aws-region: eu-west-2
+
       - name: Run Static Sites Action
         uses: ./
         with:
-          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
           working-directory: .github/workflows/tests/static-site
           cloudfront-distribution: E39K1BO4OKXJ30
