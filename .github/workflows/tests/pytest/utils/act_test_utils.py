@@ -143,21 +143,6 @@ def assert_files_exist_in_s3(expected_files: list):
 
     assert not missing_files, f"Missing files in S3 bucket: {missing_files}"
 
-def create_file(file_name: str):
-    file_path = os.path.join(folder_path, file_name)
-    with open(file_path, 'w') as f:
-        f.write('Test file')
-    LOGGER.info(f"File '{file_name}' has been created in '{folder_path}'")
-
-
-def delete_file(file_name: str):
-    file_path = os.path.join(folder_path, file_name)
-    try:
-        os.remove(file_path)
-        LOGGER.info(f"File '{file_path}' deleted successfully.")
-    except FileNotFoundError:
-        LOGGER.warning(f"File '{file_path}' not found.")
-
 def assert_file_in_folder(file_name: str, should_exist: bool):
     file_path = os.path.join(folder_path, file_name)
     exists = os.path.isfile(file_path)
