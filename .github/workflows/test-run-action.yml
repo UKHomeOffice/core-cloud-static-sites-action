@@ -1,4 +1,5 @@
 name: Test File Sync to S3
+run-name: Test File Sync to S3 - ${{ inputs.test_name }} - ${{ github.run_number }}
 
 on:
   workflow_dispatch:
