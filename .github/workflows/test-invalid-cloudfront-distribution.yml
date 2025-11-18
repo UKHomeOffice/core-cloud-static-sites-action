@@ -28,4 +28,5 @@ jobs:
           cloudfront-distribution: INVALID123
 
       - name: Mark job as success
+        if: always()
         run: exit 0
