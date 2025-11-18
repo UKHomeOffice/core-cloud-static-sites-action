@@ -51,6 +51,18 @@ def trigger_workflow(workflow_name: str, branch_name: str = "main"):
         raise RuntimeError(f"Could not find workflow run for {workflow_name} on branch {branch_name}")
     return run_id
 
+def wait_for_workflow(run_id, timeout=300, interval=5):
+    elapsed = 0
+    while elapsed < timeout:
+        result = subprocess.run(
+            ["gh", "run", "view", str(run_id), "--json", "status"],
+            capture_output=True, text=True, check=True
+        )
+        status = json.loads(result.stdout).get("status")
+        if status == "completed":
+            return True
+        time.sleep(interval)
+        elapsed += interval
 
 def fetch_logs(run_id, timeout=300, interval=5):
     elapsed = 0
