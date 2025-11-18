@@ -63,21 +63,20 @@ def trigger_workflow(workflow_name: str, branch_name: str = "main"):
             return runs[0]["databaseId"]
 
 def fetch_logs(run_id):
-    # Get jobs for the workflow run
-    jobs_result = subprocess.run(
-        ["gh", "run", "view", str(run_id), "--json", "jobs"],
-        capture_output=True, text=True, check=True
-    )
-    jobs = json.loads(jobs_result.stdout).get("jobs", [])
-    if not jobs:
-        return ""
+    # Wait until run completes
+    for _ in range(10):
+        status_result = subprocess.run(
+            ["gh", "run", "view", str(run_id), "--json", "status"],
+            capture_output=True, text=True, check=True
+        )
+        status = json.loads(status_result.stdout).get("status")
+        if status == "completed":
+            break
+        time.sleep(5)
 
-    # Use the first job (or loop if multiple)
-    job_id = jobs[0]["databaseId"]
-
-    # Fetch logs for the job
+    # Fetch logs
     logs_result = subprocess.run(
-        ["gh", "run", "view", str(job_id), "--log"],
+        ["gh", "run", "view", str(run_id), "--log"],
         capture_output=True, text=True, check=True
     )
     return logs_result.stdout
