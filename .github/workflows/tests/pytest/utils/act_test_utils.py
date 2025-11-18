@@ -52,7 +52,8 @@ def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
 def trigger_workflow(workflow_name: str, branch_name: str = "main"):
     test_name = inspect.stack()[1].function
     subprocess.run([
-        "gh", "workflow", "run", workflow_name, f"--ref={branch_name}", 
+        "gh", "workflow", "run", workflow_name, f"--ref={branch_name}",
+        "--field", f"test_name={test_name}"
     ], check=True)
 
     time.sleep(10)
