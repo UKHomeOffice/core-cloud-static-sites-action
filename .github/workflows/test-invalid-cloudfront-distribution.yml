@@ -26,7 +26,6 @@ jobs:
           bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
           working-directory: .github/workflows/tests/static-site
           cloudfront-distribution: INVALID123
-        continue-on-error: true
 
       - name: Mark job as success
         run: exit 0
