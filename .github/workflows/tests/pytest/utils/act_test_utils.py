@@ -48,11 +48,12 @@ def run_act_workflow(job_name: str, expect_failure: bool = True) -> str:
 
     return result.stdout
 
-
-def trigger_workflow(workflow_name: str):
-    subprocess.run(["gh", "workflow", "run", workflow_name, "--ref=CCL-763-testing"], check=True)
-    time.sleep(10)  # initial wait
-    for _ in range(10):  # poll up to ~100s
+def trigger_workflow(workflow_name: str, branch_name: str = "main"):
+    subprocess.run([
+        "gh", "workflow", "run", workflow_name, f"--ref={branch_name}"
+    ], check=True)
+    time.sleep(10)
+    for _ in range(10):
         result = subprocess.run(
             ["gh", "run", "list", "--workflow", workflow_name, "--json", "databaseId,status"],
             capture_output=True, text=True, check=True
@@ -62,9 +63,24 @@ def trigger_workflow(workflow_name: str):
             return runs[0]["databaseId"]
 
 def fetch_logs(run_id):
-    result = subprocess.run(["gh", "run", "view", str(run_id), "--log"], capture_output=True, text=True)
-    return result.stdout
+    # Get jobs for the workflow run
+    jobs_result = subprocess.run(
+        ["gh", "run", "view", str(run_id), "--json", "jobs"],
+        capture_output=True, text=True, check=True
+    )
+    jobs = json.loads(jobs_result.stdout).get("jobs", [])
+    if not jobs:
+        return ""
 
+    # Use the first job (or loop if multiple)
+    job_id = jobs[0]["id"]
+
+    # Fetch logs for the job
+    logs_result = subprocess.run(
+        ["gh", "run", "view", str(job_id), "--log"],
+        capture_output=True, text=True, check=True
+    )
+    return logs_result.stdout
 
 def assert_output_contains(string: str, expected_error: str):
     if expected_error not in string:
