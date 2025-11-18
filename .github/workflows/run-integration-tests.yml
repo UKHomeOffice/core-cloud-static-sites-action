@@ -48,4 +48,4 @@ jobs:
 
       - name: Run pytests
         run: |
-            pytest .github/workflows/tests/pytest --maxfail=1
+            pytest .github/workflows/tests/pytest
