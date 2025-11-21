@@ -14,4 +14,5 @@ runs:
       continue-on-error: true
 
     - name: Mark job as success
+      shell: bash
       run: exit 0
