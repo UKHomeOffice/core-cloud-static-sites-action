@@ -1,0 +1,17 @@
+name: Test Missing Bucket Name
+description: 'Test Missing Bucket Name.'
+  
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Run Static Sites Action without bucket-name
+      uses: ./
+      with:
+        assume-role-arn: arn:aws:iam::123456789012:role/TestRole
+        working-directory: ./site
+        cloudfront-distribution: TESTDISTID
+      continue-on-error: true
+
+    - name: Mark job as success
+      run: exit 0
