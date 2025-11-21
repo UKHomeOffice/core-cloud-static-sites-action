@@ -20,7 +20,6 @@ jobs:
           working-directory: ./site
           cloudfront-distribution: TESTDISTID
           bucket-name: test-bucket
-        continue-on-error: true
 
       - name: Mark job as success
         run: exit 0
