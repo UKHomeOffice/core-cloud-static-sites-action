@@ -10,6 +10,7 @@ def test_verify_files_are_present():
         "404.html",
         "500.html",
         "contact/index.html",
-        "about/index.html"
+        "about/index.html",
+        "foo"
     ]
     assert_files_exist_in_s3(expected_files)
