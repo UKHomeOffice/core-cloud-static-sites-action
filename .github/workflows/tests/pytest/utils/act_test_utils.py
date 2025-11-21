@@ -91,11 +91,12 @@ def fetch_logs(run_id, timeout=300, interval=5):
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Failed to fetch logs: {e}")
 
-def assert_output_contains(string: str, expected_error: str):
-    if expected_error not in string:
-        raise AssertionError(f"❌ Expected error message '{expected_error}' not found in logs: {string}")
-    LOGGER.info(string)
-    LOGGER.info(f"✅ Output contains expected error: '{expected_error}'")
+def assert_output_contains(logs: str, *expected_errors: str):
+    missing = [err for err in expected_errors if err not in logs]
+    if missing:
+        raise AssertionError(f"❌ Missing expected errors: {missing}\nLogs:\n{logs}")
+    for err in expected_errors:
+        LOGGER.info(f"✅ Output contains expected error: '{err}'")
 
 def assert_file_in_s3(file_key: str, should_exist: bool):
     s3 = connect_to_s3()

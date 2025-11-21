@@ -3,5 +3,9 @@ from utils.act_test_utils import trigger_workflow, assert_output_contains, fetch
 def test_missing_bucket_name():
     run_id = trigger_workflow("test-missing-bucket-name.yml", "chrismessabout2")
     logs = fetch_logs(run_id)
-    assert_output_contains(logs, "Error: Missing required input: bucket-name")
-    assert_output_contains(logs, "Error: Process completed with exit code 1")
+    assert_output_contains(
+        logs,
+        "Error: Missing required input: bucket-name",
+        "Error: Process completed with exit code 1"
+    )
+
