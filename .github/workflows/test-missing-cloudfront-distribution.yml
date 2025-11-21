@@ -18,6 +18,7 @@ jobs:
         with:
           assume-role-arn: arn:aws:iam::123456789012:role/TestRole
           bucket-name: test-bucket
+          cloudfront-distribution: TESTDISTID
           working-directory: ./site
         continue-on-error: true
 
