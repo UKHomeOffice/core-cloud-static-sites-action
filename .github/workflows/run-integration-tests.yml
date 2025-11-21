@@ -46,7 +46,7 @@ jobs:
       #     aws s3 rm s3://cc-static-site-elliotthrynacz-test-site --recursive"
 
       - name: run missing bucket name action
-        uses: ./.github/workflows/test-missing-bucket-name-action.yml
+        uses: ./.github/workflows/actions/test-missing-bucket-name-action
 
       - name: Run missing pytest bucket Name
         run: |
