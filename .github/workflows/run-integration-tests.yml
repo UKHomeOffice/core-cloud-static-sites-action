@@ -41,10 +41,21 @@ jobs:
           role-to-assume: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           aws-region: eu-west-2
 
-      - name: Authenticate GitHub CLI
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+      # - name: Cleanup
+      #   run: |
+      #     aws s3 rm s3://cc-static-site-elliotthrynacz-test-site --recursive"
 
-      - name: Run pytests
+      - name: run missing bucket name action
+        uses: ./.github/workflows/test-missing-bucket-name-action.yml
+
+      - name: Run missing pytest bucket Name
         run: |
-            pytest .github/workflows/tests/pytest
+          pytest .github/workflows/tests/pytest test_missing_bucket_name.py
+
+      # - name: Authenticate GitHub CLI
+      #   run: |
+      #     echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      # - name: Run pytests
+      #   run: |
+      #       pytest .github/workflows/tests/pytest
