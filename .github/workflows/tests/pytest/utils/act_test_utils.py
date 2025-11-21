@@ -94,7 +94,7 @@ def fetch_logs(run_id, timeout=300, interval=5):
 def assert_output_contains(string: str, expected_error: str):
     if expected_error not in string:
         raise AssertionError(f"❌ Expected error message '{expected_error}' not found in logs: {string}")
-
+    LOGGER.info(string)
     LOGGER.info(f"✅ Output contains expected error: '{expected_error}'")
 
 def assert_file_in_s3(file_key: str, should_exist: bool):
