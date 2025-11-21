@@ -6,6 +6,6 @@ def test_missing_bucket_name():
     assert_output_contains(
         logs,
         "Error: Missing required input: bucket-name",
-        "Error: Process completed with exit code 1"
+        "Error: Process completed with exit code 1."
     )
 
