@@ -50,7 +50,7 @@ jobs:
 
       - name: Run missing pytest bucket Name
         run: |
-          pytest .github/workflows/tests/pytest test_missing_bucket_name.py
+          pytest .github/workflows/tests/pytest/test_missing_bucket_name.py
 
       # - name: Authenticate GitHub CLI
       #   run: |
