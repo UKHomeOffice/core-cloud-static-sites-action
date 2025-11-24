@@ -11,7 +11,7 @@ inputs:
     description: 'Folder the files will be synced from.'
     required: true
   cache-control-s-max-age:
-    description: 'Number of seconds the information will be cached by CloudFront.'
+    description: 'Number of seconds the information will be chached by CloudFront.'
     default: 86400
     required: false
   cloudfront-distribution:
@@ -21,26 +21,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Validate Inputs
-      shell: bash
-      run: |
-        if [ -z "${{ inputs.assume-role-arn }}" ]; then
-          echo "::error::Missing required input: assume-role-arn"
-          exit 1
-        fi
-        if [ -z "${{ inputs.bucket-name }}" ]; then
-          echo "::error::Missing required input: bucket-name"
-          exit 1
-        fi
-        if [ -z "${{ inputs.working-directory }}" ]; then
-          echo "::error::Missing required input: working-directory"
-          exit 1
-        fi
-        if [ -z "${{ inputs.cloudfront-distribution }}" ]; then
-          echo "::error::Missing required input: cloudfront-distribution"
-          exit 1
-        fi
-
     - uses: aws-actions/configure-aws-credentials@v4
       name: Configure AWS IdP Credentials
       with:
@@ -55,3 +35,4 @@ runs:
         cd ./${{ inputs.working-directory }}
         aws s3 sync . s3://${{ inputs.bucket-name }}/ --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
         aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
+
