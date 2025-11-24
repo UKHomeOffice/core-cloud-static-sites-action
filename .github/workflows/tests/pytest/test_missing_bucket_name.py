@@ -5,7 +5,7 @@ def test_missing_bucket_name():
     run_id = trigger_workflow("test-missing-bucket-name.yml", "CCL-763-testing")
     logs = fetch_logs(run_id)
 
-    with open("expected_errors.json", "r") as f:
+    with open("./expected_errors.json", "r") as f:
         expected_errors = json.load(f)
 
     assert_output_contains(logs, expected_errors["missing_bucket"])
