@@ -23,13 +23,13 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           aws-region: eu-west-2
-                
+
       - name: Run Static Sites Action without bucket-name
         uses: ./
         with:
-          assume-role-arn: arn:aws:iam::123456789012:role/TestRole
-          working-directory: ./site
-          cloudfront-distribution: TESTDISTID
+          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          working-directory: .github/workflows/tests/static-site
+          cloudfront-distribution: E39K1BO4OKXJ30
         continue-on-error: true
 
       - name: Mark job as success
