@@ -1,4 +1,4 @@
-from utils.act_test_utils import trigger_workflow, validate_latest_invalidation, wait_for_workflow
+from utils.test_utils import trigger_workflow, validate_latest_invalidation, wait_for_workflow
 
 def test_verify_cloudfront_invalidation_success():
     run_id = trigger_workflow("test-run-action.yml", "CCL-763-testing")

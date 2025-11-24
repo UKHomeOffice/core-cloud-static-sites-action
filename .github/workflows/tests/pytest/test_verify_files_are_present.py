@@ -1,4 +1,4 @@
-from utils.act_test_utils import trigger_workflow, assert_files_exist_in_s3, fetch_logs
+from utils.test_utils import trigger_workflow, assert_files_exist_in_s3, fetch_logs
 
 def test_verify_files_are_present():
     run_id = trigger_workflow("test-run-action.yml", "CCL-763-testing")
