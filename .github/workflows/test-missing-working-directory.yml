@@ -28,8 +28,8 @@ jobs:
         uses: ./
         with:
           assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
-          bucket-name: test-bucket
-          cloudfront-distribution: TESTDISTID
+          bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
+          cloudfront-distribution: E39K1BO4OKXJ30
         continue-on-error: true
 
       - name: Mark job as success
