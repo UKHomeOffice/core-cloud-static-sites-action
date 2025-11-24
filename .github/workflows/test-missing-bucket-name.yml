@@ -29,7 +29,7 @@ jobs:
         with:
           assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
           working-directory: .github/workflows/tests/static-site
-          cloudfront-distribution: E39K1BO4OKXJ30
+          cloudfront-distribution: TESTDISTID
         continue-on-error: true
 
       - name: Mark job as success

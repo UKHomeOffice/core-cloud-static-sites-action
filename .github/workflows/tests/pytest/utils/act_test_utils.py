@@ -235,8 +235,10 @@ def assert_bucket_permissions():
         else:
             LOGGER.error(f"⚠️ Unexpected error when checking bucket policy: {e}")
             raise
+    
+def get_errors():
+    file_path = os.path.join(os.path.dirname(__file__), "expected_errors.json")
 
-
-def get_workflow_logs(workflow_name):
-    with open("workflow.log") as f:
-        return f.read()
+    with open(file_path, "r") as f:
+        expected_errors = json.load(f)
+    return expected_errors

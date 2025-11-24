@@ -47,4 +47,4 @@ jobs:
 
       - name: Run pytests
         run: |
-            pytest .github/workflows/tests/pytest/test_missing_bucket_name.py
+            pytest .github/workflows/tests/pytest
