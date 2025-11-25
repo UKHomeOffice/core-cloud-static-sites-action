@@ -1,0 +1,36 @@
+name: Test Missing Bucket Name
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_name:
+        description: "Name of the test triggering this workflow"
+        required: true
+run-name: Test Missing Bucket Name - ${{ inputs.test_name }} - ${{ github.run_number }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-missing-bucket-name:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          aws-region: eu-west-2
+
+      - name: Run Static Sites Action without bucket-name
+        uses: ./
+        with:
+          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          working-directory: .github/workflows/tests/static-site
+          cloudfront-distribution: E39K1BO4OKXJ30
+        continue-on-error: true
+
+      - name: Mark job as success
+        run: exit 0

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | My Static AWS Site</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f8f9fa;
+      color: #232f3e;
+      margin: 0;
+      padding: 0;
+    }
+    .about-container {
+      max-width: 700px;
+      margin: 4em auto 2em auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 2.5em 2em;
+      text-align: center;
+      animation: fadeIn 1.2s;
+    }
+    h1 {
+      color: #ff9900;
+      margin-bottom: 0.5em;
+    }
+    p {
+      font-size: 1.15em;
+      line-height: 1.7;
+      margin-bottom: 1.5em;
+    }
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+    }
+    a {
+      color: #ff9900;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .team-section {
+      margin-top: 3em;
+      padding: 2em 1em;
+      background: #f0f4f8;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      text-align: left;
+    }
+    .team-section h2 {
+      color: #232f3e;
+      margin-bottom: 0.5em;
+    }
+    .team-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .team-section li {
+      margin-bottom: 0.7em;
+      font-size: 1.1em;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="about-container">
+    <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile" class="profile-img" />
+    <h1>About This Site</h1>
+    <p>
+      Welcome! This site is a demonstration of hosting a static website using AWS S3, CloudFront, and Route 53.<br>
+      Built by <strong>Elliott Hrynacz</strong>, it showcases modern cloud hosting, fast global delivery, and secure connections.
+    </p>
+    <p>
+      Elliott is a cloud enthusiast and web developer passionate about scalable, reliable, and secure web solutions.
+    </p>
+    <p>
+      <a href="/">← Back to Home</a>
+    </p>
+    <p>
+      <a href="#team">Jump to Team Section</a>
+    </p>
+    <div id="team" class="team-section">
+      <h2>Our Team</h2>
+      <ul>
+        <li><strong>Elliott Hrynacz</strong> – Founder & Cloud Architect</li>
+        <li><strong>Jane Doe</strong> – Frontend Developer</li>
+        <li><strong>John Smith</strong> – DevOps Engineer</li>
+      </ul>
+      <p>This section is for testing fragment identifiers. If you visited <code>/about/#team</code>, you should see this section highlighted.</p>
+    </div>
+  </div>
+</body>
+</html>

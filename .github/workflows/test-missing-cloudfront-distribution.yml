@@ -1,0 +1,36 @@
+name: Test Missing CloudFront Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_name:
+        description: "Name of the test triggering this workflow"
+        required: true
+run-name: Test Missing CloudFront Distribution - ${{ inputs.test_name }} - ${{ github.run_number }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-missing-cloudfront-distribution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          aws-region: eu-west-2
+
+      - name: Run Static Sites Action without cloudfront-distribution
+        uses: ./
+        with:
+          assume-role-arn: arn:aws:iam::992382599151:role/cc-static-site-staticsite-elliotthrynacz-test-site
+          working-directory: .github/workflows/tests/static-site
+          bucket-name: cc-static-site-staticsite-elliotthrynacz-test-site
+        continue-on-error: true
+
+      - name: Mark job as success
+        run: exit 0
