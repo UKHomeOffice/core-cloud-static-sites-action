@@ -205,36 +205,6 @@ def verify_s3_headers(file_key: str, expected_headers: dict):
     if mismatches:
         raise AssertionError(f"❌ Header check failed: {mismatches}")
     LOGGER.info("✅ Header check passed!")
-
-def assert_bucket_permissions():
-    s3 = connect_to_s3()
-    LOGGER.info(f"Checking bucket ACL and policy for public access: {bucket_name}")
-
-    # Check ACL
-    acl = s3.get_bucket_acl(Bucket=bucket_name)
-    public_grantees = [
-        g for g in acl.get("Grants", [])
-        if g.get("Grantee", {}).get("URI") in [
-            "http://acs.amazonaws.com/groups/global/AllUsers",
-            "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
-        ]
-    ]
-    assert not public_grantees, f"❌ Bucket {bucket_name} ACL allows public access: {public_grantees}"
-
-    # Check bucket policy
-    try:
-        policy = s3.get_bucket_policy(Bucket=bucket_name)
-        policy_doc = json.loads(policy["Policy"])
-        for statement in policy_doc.get("Statement", []):
-            if statement.get("Effect") == "Allow" and statement.get("Principal") == "*":
-                raise AssertionError(f"❌ Bucket {bucket_name} policy allows public access: {statement}")
-        LOGGER.info(f"✅ Bucket {bucket_name} policy does not allow public access.")
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'NoSuchBucketPolicy':
-            LOGGER.info("✅ No bucket policy found (as expected).")
-        else:
-            LOGGER.error(f"⚠️ Unexpected error when checking bucket policy: {e}")
-            raise
     
 def get_errors():
     file_path = os.path.join(os.path.dirname(__file__), "expected_errors.json")
