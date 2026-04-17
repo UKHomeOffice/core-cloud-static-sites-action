@@ -22,6 +22,7 @@ The tenant must provide the below:
 | bucket-name               | The name of the S3 Bucket.                                                                        |    Yes   |
 | working-directory         | Relative path to the folder files will be uploaded from.                                          |    Yes   |
 | remote-path               | Optional path prefix inside the S3 bucket where files will be synced.                             |    No    |
+| extra-excludes            | Optional comma-separated `aws s3 sync --exclude` patterns, for example `compliance/*,docs/*`.    |    No    |
 | cloudfront-distribution   | ID Name of CloudFront Distribution.                                                               |    Yes   |
 | cache-control-s-max-age   | The time period contect is chached by CloudFront for. Default is 86400 seconds (24h).             |    No    |
 
@@ -37,5 +38,6 @@ The tenant must provide the below:
           bucket-name: ${{ vars.bucket_name }}
           working-directory: ./static-site
           remote-path: marketing/site
+          extra-excludes: compliance/*,docs/*
 ```
 

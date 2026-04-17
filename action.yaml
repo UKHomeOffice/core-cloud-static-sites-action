@@ -14,6 +14,10 @@ inputs:
     description: "Optional path prefix inside the S3 bucket to sync files to."
     default: ""
     required: false
+  extra-excludes:
+    description: "Optional comma-separated exclude patterns to pass to aws s3 sync."
+    default: ""
+    required: false
   cache-control-s-max-age:
     description: "Number of seconds the information will be chached by CloudFront."
     default: 86400
@@ -39,6 +43,7 @@ runs:
         cd ./${{ inputs.working-directory }}
         destination="s3://${{ inputs.bucket-name }}/"
         remote_path="${{ inputs.remote-path }}"
+        exclude_args=(--exclude ".*" --exclude "*/.*")
 
         if [ -n "$remote_path" ]; then
           remote_path="${remote_path#/}"
@@ -46,5 +51,16 @@ runs:
           destination="${destination}${remote_path}/"
         fi
 
-        aws s3 sync . "$destination" --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
+        IFS=',' read -r -a extra_patterns <<< "${{ inputs.extra-excludes }}"
+
+        for pattern in "${extra_patterns[@]}"; do
+          pattern="${pattern#${pattern%%[![:space:]]*}}"
+          pattern="${pattern%${pattern##*[![:space:]]}}"
+
+          if [ -n "$pattern" ]; then
+            exclude_args+=(--exclude "$pattern")
+          fi
+        done
+
+        aws s3 sync . "$destination" "${exclude_args[@]}" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
         aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
