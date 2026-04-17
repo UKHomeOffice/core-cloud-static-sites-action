@@ -1,23 +1,27 @@
-name: 'Deploy Static Sites'
-description: 'Deploys Static Sites using S3 and CloudFront.'
+name: "Deploy Static Sites"
+description: "Deploys Static Sites using S3 and CloudFront."
 inputs:
   assume-role-arn:
-    description: 'Role assumed by the action.'
+    description: "Role assumed by the action."
     required: true
   bucket-name:
-    description: 'The name of the S3 Bucket.'
+    description: "The name of the S3 Bucket."
     required: true
   working-directory:
-    description: 'Folder the files will be synced from.'
+    description: "Folder the files will be synced from."
     required: true
+  remote-path:
+    description: "Optional path prefix inside the S3 bucket to sync files to."
+    default: ""
+    required: false
   cache-control-s-max-age:
-    description: 'Number of seconds the information will be chached by CloudFront.'
+    description: "Number of seconds the information will be chached by CloudFront."
     default: 86400
     required: false
   cloudfront-distribution:
-    description: 'ID Name of CloudFront Distribution.'
+    description: "ID Name of CloudFront Distribution."
     required: true
-  
+
 runs:
   using: "composite"
   steps:
@@ -33,6 +37,14 @@ runs:
       shell: bash
       run: |
         cd ./${{ inputs.working-directory }}
-        aws s3 sync . s3://${{ inputs.bucket-name }}/ --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
-        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
+        destination="s3://${{ inputs.bucket-name }}/"
+        remote_path="${{ inputs.remote-path }}"
 
+        if [ -n "$remote_path" ]; then
+          remote_path="${remote_path#/}"
+          remote_path="${remote_path%/}"
+          destination="${destination}${remote_path}/"
+        fi
+
+        aws s3 sync . "$destination" --exclude ".*" --exclude "*/.*" --delete --cache-control 's-maxage=${{ inputs.cache-control-s-max-age}}'
+        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution }} --paths "/*"
